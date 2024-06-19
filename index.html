@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webchat</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { width: 300px; height: 400px; border: 1px solid #ccc; overflow-y: scroll; }
+        #message { width: 300px; }
+    </style>
+</head>
+<body>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const socket = new WebSocket('wss://your-backend-server.herokuapp.com');
+
+        socket.onmessage = function(event) {
+            const chat = document.getElementById('chat');
+            const message = document.createElement('div');
+            message.textContent = event.data;
+            chat.appendChild(message);
+        };
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message');
+            socket.send(messageInput.value);
+            messageInput.value = '';
+        }
+    </script>
+</body>
+</html>
